@@ -1,3 +1,12 @@
 # Ignore binaries
 
 lenslocked.com
+
+# IDE config files
+
+workspace.code-workspace
+
+#Some lib config file I think
+
+#This has runner-build temp file, I think it's of fresh library
+/tmp
