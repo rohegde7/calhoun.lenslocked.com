@@ -13,5 +13,13 @@ func main() {
 
 func handleSlash(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/html")
-	fmt.Fprintf(w, "<h1>My name is Rohit</h1>")
+
+	fmt.Println(r.URL.Path)
+
+	if r.URL.Path == "/" {
+		fmt.Fprintf(w, "<h1>Welcome to home</h1>")
+
+	} else if r.URL.Path == "/name" {
+		fmt.Fprintf(w, "<h1>My name is Rohit</h1>")
+	}
 }
