@@ -5,6 +5,7 @@ lenslocked.com
 # IDE config files
 
 workspace.code-workspace
+.idea/
 
 #Some lib config file I think
 
