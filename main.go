@@ -2,15 +2,17 @@ package main
 
 import (
 	"fmt"
+	"github.com/gorilla/mux"
 	"net/http"
 )
 
 func main() {
-	var myStringExample = string(`as`)
-	println(myStringExample)
 
-	http.HandleFunc("/", handleSlash)
-	http.ListenAndServe(":8080", nil)
+	router := mux.NewRouter()
+	router.HandleFunc("/", handleSlash)
+
+	//http.HandleFunc("/", handleSlash)
+	http.ListenAndServe(":8081", router)
 }
 
 func handleSlash(w http.ResponseWriter, r *http.Request) {
