@@ -16,7 +16,7 @@ func main() {
 	router.HandleFunc("/faq", faqPage)
 
 	//http.HandleFunc("/", handleSlash)
-	_ = http.ListenAndServe(":8080", router)
+	_ = http.ListenAndServe(":8081", router)
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
@@ -31,6 +31,7 @@ func name(w http.ResponseWriter, r *http.Request) {
 
 func notFoundCustomPage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/html")
+	w.WriteHeader(http.StatusNotFound)
 
 	_, _ = fmt.Fprintf(
 		w,
