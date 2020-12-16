@@ -1,0 +1,12 @@
+<h1>
+    <p>
+{{/*        MY NAME IS - {{.Name}}*/}}
+{{/*        And my fav dog name is {{.Dog.Name}}*/}}
+{{/*        I am {{.Age}} years old*/}}
+{{/*        And my dog's age in float is {{.Dog.Age}}*/}}
+    </p>
+</h1>
+
+<body>
+    {{range $dog := .Dogs}} Dog name is {{$dog}} {{end}}
+</body>
