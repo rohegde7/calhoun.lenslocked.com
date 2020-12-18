@@ -3,10 +3,21 @@ package main
 import (
 	"fmt"
 	"github.com/gorilla/mux"
+	"html/template"
 	"net/http"
 )
 
+var homeTemplate *template.Template
+
 func main() {
+	var err error
+
+	homeTemplate, err = template.ParseFiles("views/home.gohtml")
+
+	if err != nil {
+		panic(err)
+	}
+
 	router := mux.NewRouter()
 
 	router.NotFoundHandler = http.HandlerFunc(notFoundCustomPage)
@@ -21,7 +32,9 @@ func main() {
 
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/html")
-	_, _ = fmt.Fprintf(w, "<h1>Welcome to home</h1>")
+
+	_ = homeTemplate.Execute(w, nil)
+	//_, _ = fmt.Fprintf(w, "<h1>Welcome to home</h1>")
 }
 
 func name(w http.ResponseWriter, r *http.Request) {
