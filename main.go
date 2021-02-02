@@ -7,14 +7,19 @@ import (
 	"net/http"
 )
 
-var homeTemplate *template.Template
+var (
+	homeTemplate    *template.Template
+	contactTemplate *template.Template
+)
 
 func main() {
 	var err error
+	var contactTemplateErr error
 
 	homeTemplate, err = template.ParseFiles("views/home.gohtml")
+	contactTemplate, contactTemplateErr = template.ParseFiles("views/contact.gohtml")
 
-	if err != nil {
+	if err != nil && contactTemplateErr != nil {
 		panic(err)
 	}
 
@@ -25,16 +30,15 @@ func main() {
 	router.HandleFunc("/", home)
 	router.HandleFunc("/name", name)
 	router.HandleFunc("/faq", faqPage)
+	router.HandleFunc("/contact", contact)
 
-	//http.HandleFunc("/", handleSlash)
-	_ = http.ListenAndServe(":8081", router)
+	_ = http.ListenAndServe(":8080", router)
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/html")
 
 	_ = homeTemplate.Execute(w, nil)
-	//_, _ = fmt.Fprintf(w, "<h1>Welcome to home</h1>")
 }
 
 func name(w http.ResponseWriter, r *http.Request) {
@@ -67,4 +71,11 @@ func faqPage(w http.ResponseWriter, r *http.Request) {
 				</a>
 				Kya samjha!?
 			</p>`)
+}
+
+func contact(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "text/html")
+	w.WriteHeader(http.StatusAccepted)
+
+	contactTemplate.Execute(w, nil)
 }
