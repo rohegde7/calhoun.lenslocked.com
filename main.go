@@ -10,14 +10,18 @@ import (
 var (
 	homeTemplate    *template.Template
 	contactTemplate *template.Template
+	nameTemplate *template.Template
+	notFoundTemplate *template.Template
 )
 
 func main() {
 	var err error
 	var contactTemplateErr error
 
-	homeTemplate, err = template.ParseFiles("views/home.gohtml")
-	contactTemplate, contactTemplateErr = template.ParseFiles("views/contact.gohtml")
+	homeTemplate, err = template.ParseFiles("views/home.gohtml", "views/layout/footer.html")
+	contactTemplate, contactTemplateErr = template.ParseFiles("views/contact.gohtml", "views/layout/footer.html")
+	nameTemplate, _ = template.ParseFiles("views/name.gohtml", "views/layout/footer.html")
+	notFoundTemplate, _ = template.ParseFiles("views/notfound.gohtml", "views/layout/footer.html")
 
 	if err != nil && contactTemplateErr != nil {
 		panic(err)
@@ -43,21 +47,16 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 func name(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/html")
-	_, _ = fmt.Fprintf(w, "<h1>My name is Rohit</h1>")
+	w.WriteHeader(http.StatusOK)
+
+	nameTemplate.Execute(w, nil)
 }
 
 func notFoundCustomPage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/html")
 	w.WriteHeader(http.StatusNotFound)
 
-	_, _ = fmt.Fprintf(
-		w,
-		`<h1>404! couldn't find the page you requested</h1>
-			<p>Please email me at
-				<a href="mailto:hegde.rohit7@gmail.com">
-					hegde.rohit7@gmail.com
-				</a>
-			</p>`)
+	notFoundTemplate.Execute(w, nil)
 }
 
 func faqPage(w http.ResponseWriter, r *http.Request) {
