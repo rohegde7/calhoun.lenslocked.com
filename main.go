@@ -3,29 +3,22 @@ package main
 import (
 	"fmt"
 	"github.com/gorilla/mux"
-	"html/template"
 	"net/http"
 )
 
 var (
-	homeTemplate    *template.Template
-	contactTemplate *template.Template
-	nameTemplate *template.Template
-	notFoundTemplate *template.Template
+	homeView     *View
+	contactView  *View
+	nameView     *View
+	notFoundView *View
 )
 
 func main() {
-	var err error
-	var contactTemplateErr error
 
-	homeTemplate, err = template.ParseFiles("views/home.gohtml", "views/layout/footer.html")
-	contactTemplate, contactTemplateErr = template.ParseFiles("views/contact.gohtml", "views/layout/footer.html")
-	nameTemplate, _ = template.ParseFiles("views/name.gohtml", "views/layout/footer.html")
-	notFoundTemplate, _ = template.ParseFiles("views/notfound.gohtml", "views/layout/footer.html")
-
-	if err != nil && contactTemplateErr != nil {
-		panic(err)
-	}
+	homeView = NewView("views/home.gohtml")
+	contactView = NewView("views/contact.gohtml")
+	nameView = NewView("views/name.gohtml")
+	notFoundView = NewView("views/notfound.gohtml")
 
 	router := mux.NewRouter()
 
@@ -42,21 +35,21 @@ func main() {
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/html")
 
-	_ = homeTemplate.Execute(w, nil)
+	_ = homeView.Template.Execute(w, nil)
 }
 
 func name(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/html")
 	w.WriteHeader(http.StatusOK)
 
-	nameTemplate.Execute(w, nil)
+	nameView.Template.Execute(w, nil)
 }
 
 func notFoundCustomPage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/html")
 	w.WriteHeader(http.StatusNotFound)
 
-	notFoundTemplate.Execute(w, nil)
+	notFoundView.Template.Execute(w, nil)
 }
 
 func faqPage(w http.ResponseWriter, r *http.Request) {
@@ -76,5 +69,5 @@ func contact(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-type", "text/html")
 	w.WriteHeader(http.StatusAccepted)
 
-	contactTemplate.Execute(w, nil)
+	contactView.Template.Execute(w, nil)
 }
